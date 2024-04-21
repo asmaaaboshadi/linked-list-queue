@@ -1,0 +1,169 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+
+
+ interface IQueue {
+      /* Inserts an item at the queue front.*/
+      public void enqueue(Object item);
+      /* Removes the object at the queue rear and returnsit.*/
+      public Object dequeue();
+      /* Tests if this queue is empty.*/
+      public boolean isEmpty();
+      /* Returns the number of elements in the queue*/
+      public int size();
+}
+
+public class LinkedListQueue implements IQueue {
+    public static Node head;
+    public static Node tail;
+    public static int size;
+    class Node{
+        Object data;
+        Node next;
+        Node prev;
+        Node(Object d,Node head){
+            data = d;
+            next = null;
+       }
+    }
+    public LinkedListQueue () {
+        head=null;
+        tail=null;
+    }
+
+    @Override
+    public void enqueue(Object item) {
+        // TODO Auto-generated method stub
+        Node node = new Node(item,head);
+        node.next=null;
+        if(size==0) {
+            head=node;
+        }
+        else {
+            node.prev=tail;
+            tail.next=node;
+
+        }
+        tail=node;
+        size++;
+    }
+    public void display(int size){
+        int i;
+        System.out.print("[");
+        Node current = tail;
+        i = 0;
+        while(current != null) {
+            System.out.print(current.data);
+            current = current.prev;
+            i++;
+            if(i != size) {
+                System.out.print(", ");
+            }
+        }
+        System.out.print("]");
+    }
+    @Override
+    public Object dequeue() {
+        Object temp = null;
+        if(size==0) {
+            System.out.println("Error");
+        }
+        else if(size==1){
+            temp = head.data;
+            head=null;
+            tail=null;
+            size--;
+        }
+        else {
+            temp = head.data;
+            head=head.next;
+            head.prev=null;
+            size--;
+        }
+        return temp;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        if(size==0) {
+            return true;
+        }
+        else {
+        return false;
+        }
+    }
+
+    @Override
+    public int size() {
+        int i = 0;
+        Node current = head;
+        while(current != null) {
+            current = current.next;
+            i++;
+        }
+        return i;
+    }
+    public static String[] reverse (String[]arr , int start , int end) {
+        String temp;
+        if (start<end) {
+            temp=arr[start];
+            arr[start]=arr[end];
+            arr[end]=temp;
+            reverse(arr,start+1,end-1);
+        }
+        return arr;
+    }
+    
+    public static void main(String[] args){
+        Scanner input = new Scanner(System.in);
+            String s1 = input.nextLine().replaceAll("\\[|\\]", "");
+              String[] s2 = s1.split(", ");
+              LinkedListQueue queue = new LinkedListQueue();
+                boolean x = s2[0].isEmpty();
+                size = 0;
+                int i;
+             String[] arr=reverse(s2,0,s2.length-1);
+             if(arr.length != 0 && (x == false)) {
+                    for(i = 0; i < arr.length; i++) {
+                        queue.enqueue(arr[i]);
+                    }
+                    size = arr.length;
+                }
+                String operation = input.nextLine();
+                Object num;
+                if(operation.equals("enqueue")) {
+                    num = input.nextInt();
+                    queue.enqueue(num);
+                    queue.display(size);
+                }
+                else if(operation.equals("dequeue")) {
+                    if (queue.isEmpty()) {
+                        queue.dequeue();
+                    }
+                    else {
+                    queue.dequeue();
+                    queue.display(size);
+                    }
+                }
+                else if(operation.equals("size")) {
+                    System.out.print(queue.size());
+                }
+                else if(operation.equals("isEmpty")) {
+                    if(queue.isEmpty()){
+                        System.out.print("True");
+                    }
+                    else
+                        System.out.print("False");
+                    
+                }
+              else
+                  System.out.print("Error");
+                  
+                input.close();
+        }
+       
+    }
